@@ -1,0 +1,13 @@
+﻿{
+    "profiles": {
+        "gestao_tarefa": {
+            "commandName": "Project",
+            "launchBrowser": true,
+            "environmentVariables": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "applicationUrl": "http://localhost:5011",
+            "launchUrl": "swagger/index.html"
+        }
+    }
+}
