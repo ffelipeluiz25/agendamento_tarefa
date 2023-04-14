@@ -9,5 +9,6 @@ public class Usuarios : BaseClass
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int Id { get; set; }
     public string Nome { get; set; }
+    public string Sobrenome { get; set; }
     public  List<AgendamentoTarefas> ListaAgendamentoTarefas { get; set; }
 }

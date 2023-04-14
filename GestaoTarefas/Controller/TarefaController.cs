@@ -1,47 +1,61 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using GestaoTarefas.Data.DTOs;
+using GestaoTarefas.Enumeradores;
+using GestaoTarefas.Services.Interfaces;
+using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 using System.Net.Mime;
+
 namespace GestaoTarefas.Controller;
 [ApiController]
-[Route("account")]
+[Route("tarefa")]
 public class TarefaController : ControllerBase
 {
-
-    private readonly ILogger<TarefaController> _logger;
-
-    public TarefaController(ILogger<TarefaController> logger)
+    private readonly IAgendamentoTarefaService _agendamentoTarefaService;
+    public TarefaController(IAgendamentoTarefaService agendamentoTarefaService)
     {
-        _logger = logger;
+        _agendamentoTarefaService = agendamentoTarefaService;
     }
 
-    [HttpPost("create")]
+    [HttpGet("status")]
     [Consumes(MediaTypeNames.Application.Json)]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public IActionResult Post(List<dynamic> listAccount)
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [SwaggerResponse(StatusCodes.Status200OK, "Recuperar status de agendamentos", typeof(ResultDTO<StatusAgendamentoDTO>))]
+    [SwaggerResponse(StatusCodes.Status404NotFound, Type = typeof(ResultDTO<StatusAgendamentoDTO>))]
+    public IActionResult RecuperaStatus()
     {
-        try
-        {
-            return Ok();
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, $"[Error] Method: create-account | {ex.Message}");
-            return StatusCode(500);
-        }
+        var result = _agendamentoTarefaService.RecuperaStatus();
+        if (!result.Success)
+            return BadRequest(result);
+        return Ok(result);
     }
 
-    [HttpGet("get")]
+    [HttpPost("agendamento")]
     [Consumes(MediaTypeNames.Application.Json)]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<IActionResult> Get()
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [SwaggerResponse(StatusCodes.Status200OK, "Criar agendamento", typeof(ResultDTO<bool>))]
+    [SwaggerResponse(StatusCodes.Status404NotFound, Type = typeof(ResultDTO<bool>))]
+    public async Task<IActionResult> Agendamento(AgendamentoDTO agendamento)
     {
-        try
-        {
-            return Ok();
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, $"[Error] Method: get-account-filters | {ex.Message}");
-            return StatusCode(500);
-        }
+        var result = await _agendamentoTarefaService.Agendamento(agendamento);
+        if (!result.Success)
+            return BadRequest(result);
+        return Ok(result);
+    }
+
+    [HttpPost("atualiza-status")]
+    [Consumes(MediaTypeNames.Application.Json)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [SwaggerResponse(StatusCodes.Status200OK, "Atualizar status", typeof(ResultDTO<bool>))]
+    [SwaggerResponse(StatusCodes.Status400BadRequest, Type = typeof(ResultDTO<bool>))]
+    public async Task<IActionResult> AtualizarStatus(AtualizaStatusDTO atualizaStatus)
+    {
+        var result = await _agendamentoTarefaService.AtualizarStatus(atualizaStatus);
+        if (!result.Success)
+            return BadRequest(result);
+
+        return Ok(result);
     }
 }

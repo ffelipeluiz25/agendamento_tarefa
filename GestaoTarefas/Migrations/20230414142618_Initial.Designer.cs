@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GestaoTarefas.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20230413230818_Initial")]
+    [Migration("20230414142618_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -87,6 +87,10 @@ namespace GestaoTarefas.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Nome")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Sobrenome")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 

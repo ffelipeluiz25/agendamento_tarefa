@@ -1,16 +1,19 @@
 ﻿using AutoMapper;
+using GestaoTarefas.Data.DTOs;
+using GestaoTarefas.Data.Models;
 namespace GestaoTarefas.Mapper;
 public class DefaultMapperProfile : Profile
 {
     public DefaultMapperProfile()
     {
-        //CreateMap<JpmAccountDto, JpmAccount>();
-        //CreateMap<JpmAccount, JpmAccountDto>();
+        CreateMap<UsuarioDTO, Usuarios>();
+        CreateMap<Usuarios, UsuarioDTO>();
 
-        //CreateMap<JpmImportFileDto, JpmImportFile>();
-        //CreateMap<JpmImportFile, JpmImportFileDto>();
+        CreateMap<UsuarioAllDTO, Usuarios>();
+        CreateMap<Usuarios, UsuarioAllDTO>();
 
-        //CreateMap<JpmLogDto, JpmLog>();
-        //CreateMap<JpmLog, JpmLogDto>();
+        CreateMap<AgendamentoDTO, AgendamentoTarefas>();
+        CreateMap<AgendamentoTarefas, AgendamentoDTO>();
+
     }
 }
