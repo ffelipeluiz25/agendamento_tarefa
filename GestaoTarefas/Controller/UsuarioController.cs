@@ -10,12 +10,10 @@ namespace GestaoTarefas.Controller;
 public class UsuarioController : ControllerBase
 {
 
-    private readonly ILogger<UsuarioController> _logger;
     private readonly IUsuarioService _usuarioService;
 
-    public UsuarioController(ILogger<UsuarioController> logger, IUsuarioService usuarioService)
+    public UsuarioController(IUsuarioService usuarioService)
     {
-        _logger = logger;
         _usuarioService = usuarioService;
     }
 

@@ -1,5 +1,4 @@
 ﻿using GestaoTarefas.Data.DTOs;
-using GestaoTarefas.Data.Models;
 using GestaoTarefas.Repositorios.Interfaces;
 using GestaoTarefas.Services.Interfaces;
 

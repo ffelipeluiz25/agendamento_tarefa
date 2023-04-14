@@ -8,5 +8,8 @@ public class TarefaArquivosConfiguration : IEntityTypeConfiguration<TarefaArquiv
     {
         builder.HasKey(x => x.Id);
         builder.Property(f => f.Id).ValueGeneratedOnAdd();
+        builder.HasOne(x => x.AgendamentoTarefa)
+                         .WithMany(y => y.ListaTarefaArquivos)
+                         .HasForeignKey(x => x.TarefaId);
     }
 }

@@ -22,18 +22,25 @@ public class AgendamentoTarefaService : IAgendamentoTarefaService
         {
             case (int)EnumStatusAgentamento.Agendada:
                 {
-                    return Utils.RetornoMensagem<bool>.RetornoMensagemErro("Usuario não tem tarefas agendadas!");
+                    var tarefa = await _agendamentoTarefeRepositorio.BuscaTarefaPorUsuarioIdAndStatus(atualizaStatus.UsuarioId, (int)EnumStatusAgentamento.Agendada);
+                    if (tarefa.Success && tarefa.Data != null) return Utils.RetornoMensagem<bool>.RetornoMensagemErro("Usuario tem ja tarefas agendadas!");
+
+                    return Utils.RetornoMensagem<bool>.RetornoMensagemErro("Não pode ser atualizado o status do agendamento!");
                 }
             case (int)EnumStatusAgentamento.EmAndamento:
                 {
                     var tarefa = await _agendamentoTarefeRepositorio.BuscaTarefaPorUsuarioIdAndStatus(atualizaStatus.UsuarioId, (int)EnumStatusAgentamento.Agendada);
-                    if (tarefa == null) return Utils.RetornoMensagem<bool>.RetornoMensagemErro("Usuario não tem tarefas agendadas para trocar para em andamento!");
+                    if (tarefa == null || tarefa.Data == null) return Utils.RetornoMensagem<bool>.RetornoMensagemErro("Usuario não tem tarefas agendadas para trocar para em andamento!");
                     break;
                 }
             case (int)EnumStatusAgentamento.Finalizada:
                 {
-                    var tarefa = await _agendamentoTarefeRepositorio.BuscaTarefaPorUsuarioIdAndStatus(atualizaStatus.UsuarioId, (int)EnumStatusAgentamento.EmAndamento);
-                    if (tarefa == null) return Utils.RetornoMensagem<bool>.RetornoMensagemErro("Usuario não tem tarefas em andamento para ser finalizada!");
+                    var tarefa = await _agendamentoTarefeRepositorio.BuscaTarefaPorUsuarioIdAndStatus(atualizaStatus.UsuarioId, (int)EnumStatusAgentamento.Agendada);
+                    if (tarefa.Success && tarefa.Data != null) return Utils.RetornoMensagem<bool>.RetornoMensagemErro("Usuario tem tarefas agendadas e nao pode ser finalizada!");
+
+                    tarefa = await _agendamentoTarefeRepositorio.BuscaTarefaPorUsuarioIdAndStatus(atualizaStatus.UsuarioId, (int)EnumStatusAgentamento.EmAndamento);
+                    if (tarefa.Success && tarefa.Data == null) return Utils.RetornoMensagem<bool>.RetornoMensagemErro("Usuario não tem tarefas em andamento para ser finalizada!");
+
                     break;
                 }
             default:
@@ -44,6 +51,11 @@ public class AgendamentoTarefaService : IAgendamentoTarefaService
 
         await _agendamentoTarefeRepositorio.AtualizaStatus(atualizaStatus.Status, atualizaStatus.UsuarioId);
         return Utils.RetornoMensagem<bool>.RetornoMensagemSucesso(true);
+    }
+
+    public async Task<ResultDTO<RecuperaPeriodoTempoDTO>> RecuperaPeriodoTempo(int tarefaId)
+    {
+        return await _agendamentoTarefeRepositorio.RecuperaPeriodoTempo(tarefaId);
     }
 
     public ResultDTO<StatusAgendamentoDTO> RecuperaStatus()

@@ -23,13 +23,15 @@ public static class ExtensionApi
     }
     public static IServiceCollection ConfigureInjections(this IServiceCollection services)
     {
+        //Repositories
         services.AddScoped<IUsuarioRepository, UsuarioRepository>();
         services.AddScoped<IAgendamentoTarefaRepository, AgendamentoTarefaRepository>();
+        services.AddScoped<ITarefaArquivoRepository, TarefaArquivoRepository>();
 
-
+        //Services
         services.AddScoped<IUsuarioService, UsuarioService>();
         services.AddScoped<IAgendamentoTarefaService, AgendamentoTarefaService>();
-
+        services.AddScoped<ITarefaArquivoService, TarefaArquivoService>();
 
         return services;
     }

@@ -6,20 +6,6 @@ namespace GestaoTarefas.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "TarefaArquivo",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Path = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DataCriacao = table.Column<DateTime>(type: "datetime2", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_TarefaArquivo", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Usuario",
                 columns: table => new
                 {
@@ -41,6 +27,8 @@ namespace GestaoTarefas.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     DataInicio = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DataEmAndamento = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    DataFinalizacao = table.Column<DateTime>(type: "datetime2", nullable: true),
                     Duracao = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<int>(type: "int", nullable: false),
                     UsuarioId = table.Column<int>(type: "int", nullable: false),
@@ -57,19 +45,46 @@ namespace GestaoTarefas.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "TarefaArquivo",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    TarefaId = table.Column<int>(type: "int", nullable: false),
+                    NomeArquivo = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Extensao = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DataCriacao = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TarefaArquivo", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_TarefaArquivo_AgendamentoTarefa_TarefaId",
+                        column: x => x.TarefaId,
+                        principalTable: "AgendamentoTarefa",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AgendamentoTarefa_UsuarioId",
                 table: "AgendamentoTarefa",
                 column: "UsuarioId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TarefaArquivo_TarefaId",
+                table: "TarefaArquivo",
+                column: "TarefaId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "AgendamentoTarefa");
+                name: "TarefaArquivo");
 
             migrationBuilder.DropTable(
-                name: "TarefaArquivo");
+                name: "AgendamentoTarefa");
 
             migrationBuilder.DropTable(
                 name: "Usuario");

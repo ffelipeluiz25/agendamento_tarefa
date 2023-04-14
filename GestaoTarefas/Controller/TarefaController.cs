@@ -30,6 +30,20 @@ public class TarefaController : ControllerBase
         return Ok(result);
     }
 
+    [HttpGet("recupera-periodo-tempo/{tarefaId}")]
+    [Consumes(MediaTypeNames.Application.Json)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [SwaggerResponse(StatusCodes.Status200OK, "Recuperar status de agendamentos", typeof(ResultDTO<RecuperaPeriodoTempoDTO>))]
+    [SwaggerResponse(StatusCodes.Status404NotFound, Type = typeof(ResultDTO<RecuperaPeriodoTempoDTO>))]
+    public async Task<IActionResult> RecuperaPeriodoTempo(int tarefaId)
+    {
+        var result = await _agendamentoTarefaService.RecuperaPeriodoTempo(tarefaId);
+        if (!result.Success)
+            return BadRequest(result);
+        return Ok(result);
+    }
+
     [HttpPost("agendamento")]
     [Consumes(MediaTypeNames.Application.Json)]
     [ProducesResponseType(StatusCodes.Status200OK)]

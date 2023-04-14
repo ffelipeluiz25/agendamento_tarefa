@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GestaoTarefas.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20230414142618_Initial")]
+    [Migration("20230414192148_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -34,6 +34,12 @@ namespace GestaoTarefas.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("DataCriacao")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DataEmAndamento")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DataFinalizacao")
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime>("DataInicio")
@@ -66,11 +72,20 @@ namespace GestaoTarefas.Migrations
                     b.Property<DateTime>("DataCriacao")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Path")
+                    b.Property<string>("Extensao")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("NomeArquivo")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("TarefaId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("TarefaId");
 
                     b.ToTable("TarefaArquivo");
                 });
@@ -108,6 +123,22 @@ namespace GestaoTarefas.Migrations
                         .IsRequired();
 
                     b.Navigation("Usuario");
+                });
+
+            modelBuilder.Entity("GestaoTarefas.Data.Models.TarefaArquivos", b =>
+                {
+                    b.HasOne("GestaoTarefas.Data.Models.AgendamentoTarefas", "AgendamentoTarefa")
+                        .WithMany("ListaTarefaArquivos")
+                        .HasForeignKey("TarefaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AgendamentoTarefa");
+                });
+
+            modelBuilder.Entity("GestaoTarefas.Data.Models.AgendamentoTarefas", b =>
+                {
+                    b.Navigation("ListaTarefaArquivos");
                 });
 
             modelBuilder.Entity("GestaoTarefas.Data.Models.Usuarios", b =>

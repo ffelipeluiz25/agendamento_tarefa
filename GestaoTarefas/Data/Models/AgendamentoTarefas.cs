@@ -11,6 +11,8 @@ public class AgendamentoTarefas : BaseClass
     public int Id { get; set; }
     [Required]
     public DateTime DataInicio { get; set; }
+    public DateTime? DataEmAndamento { get; set; }
+    public DateTime? DataFinalizacao { get; set; }
     [Required]
     public int Duracao { get; set; }
     [Required]
@@ -22,4 +24,5 @@ public class AgendamentoTarefas : BaseClass
     public EnumStatusAgentamento eStatus { get; set; }
     [NotMapped]
     public Usuarios Usuario { get; set; }
+    public List<TarefaArquivos> ListaTarefaArquivos { get; set; }
 }

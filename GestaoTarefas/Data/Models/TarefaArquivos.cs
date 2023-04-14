@@ -9,5 +9,10 @@ public class TarefaArquivos : BaseClass
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int Id { get; set; }
     [Required]
-    public string Path { get; set; }
+    public int TarefaId { get; set; }
+    [Required]
+    public string NomeArquivo { get; set; }
+    [Required]
+    public string Extensao { get; set; }
+    public AgendamentoTarefas AgendamentoTarefa { get; set; }
 }

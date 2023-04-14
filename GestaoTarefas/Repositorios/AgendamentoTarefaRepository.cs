@@ -2,6 +2,7 @@
 using GestaoTarefas.Data.Context;
 using GestaoTarefas.Data.DTOs;
 using GestaoTarefas.Data.Models;
+using GestaoTarefas.Enumeradores;
 using GestaoTarefas.Repositorios.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
@@ -39,6 +40,20 @@ public class AgendamentoTarefaRepository : IAgendamentoTarefaRepository
             if (result != null)
             {
                 result.Status = status;
+                switch (status)
+                {
+                    case (int)EnumStatusAgentamento.EmAndamento:
+                        {
+                            result.DataEmAndamento = DateTime.Now;
+                            break;
+                        }
+                    case (int)EnumStatusAgentamento.Finalizada:
+                        {
+                            result.DataFinalizacao = DateTime.Now;
+                            break;
+                        }
+
+                }
                 await _context.SaveChangesAsync();
             }
         }
@@ -56,4 +71,18 @@ public class AgendamentoTarefaRepository : IAgendamentoTarefaRepository
         }
     }
 
+    public async Task<ResultDTO<RecuperaPeriodoTempoDTO>> RecuperaPeriodoTempo(int tarefaId)
+    {
+        using (var scope = _services.CreateScope())
+        {
+            var _context = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
+            var tarefa = await _context.AgendamentoTarefa.FirstOrDefaultAsync(task => task.Id.Equals(tarefaId) && task.DataEmAndamento.HasValue && task.DataFinalizacao.HasValue);
+            if (tarefa == null)
+                return Utils.RetornoMensagem<RecuperaPeriodoTempoDTO>.RetornoMensagemErro("Tarefa não encontrado ou nao finalizada!");
+
+            CalculaPeriodoTempoDTO calculo = new CalculaPeriodoTempoDTO(tarefa.DataEmAndamento.Value, tarefa.DataFinalizacao.Value);
+            var result = new RecuperaPeriodoTempoDTO() { Retorno = calculo.Retorno() };
+            return Utils.RetornoMensagem<RecuperaPeriodoTempoDTO>.RetornoMensagemSucesso(result);
+        }
+    }
 }
