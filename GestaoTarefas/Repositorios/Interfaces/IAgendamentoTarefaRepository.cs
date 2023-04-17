@@ -1,4 +1,5 @@
 ﻿using GestaoTarefas.Data.DTOs;
+
 namespace GestaoTarefas.Repositorios.Interfaces;
 public interface IAgendamentoTarefaRepository
 {
@@ -6,4 +7,5 @@ public interface IAgendamentoTarefaRepository
     Task<ResultDTO<bool>> AtualizaStatus(int status, int usuarioId);
     Task<ResultDTO<AgendamentoDTO>> BuscaTarefaPorUsuarioIdAndStatus(int usuarioId, int status);
     Task<ResultDTO<RecuperaPeriodoTempoDTO>> RecuperaPeriodoTempo(int tarefaId);
+    Task<ResultDTO<List<AgendamentoTarefasDTO>>> RecuperarTodas();
 }

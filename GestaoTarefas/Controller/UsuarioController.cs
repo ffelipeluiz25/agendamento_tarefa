@@ -57,8 +57,8 @@ public class UsuarioController : ControllerBase
     {
         var result = await _usuarioService.Criar(usuario);
         if (!result.Success)
-            return BadRequest(result);
-        return Ok();
+            return Conflict();
+        return Ok(result);
     }
 
 }

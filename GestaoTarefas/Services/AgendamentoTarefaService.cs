@@ -2,6 +2,7 @@
 using GestaoTarefas.Enumeradores;
 using GestaoTarefas.Repositorios.Interfaces;
 using GestaoTarefas.Services.Interfaces;
+
 namespace GestaoTarefas.Services;
 public class AgendamentoTarefaService : IAgendamentoTarefaService
 {
@@ -56,6 +57,11 @@ public class AgendamentoTarefaService : IAgendamentoTarefaService
     public async Task<ResultDTO<RecuperaPeriodoTempoDTO>> RecuperaPeriodoTempo(int tarefaId)
     {
         return await _agendamentoTarefeRepositorio.RecuperaPeriodoTempo(tarefaId);
+    }
+
+    public async Task<ResultDTO<List<AgendamentoTarefasDTO>>> RecuperarTodas()
+    {
+        return await _agendamentoTarefeRepositorio.RecuperarTodas();
     }
 
     public ResultDTO<StatusAgendamentoDTO> RecuperaStatus()

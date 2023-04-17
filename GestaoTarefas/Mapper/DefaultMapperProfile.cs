@@ -18,5 +18,8 @@ public class DefaultMapperProfile : Profile
         CreateMap<TarefaArquivoDTO, TarefaArquivos>();
         CreateMap<TarefaArquivos, TarefaArquivoDTO>();
 
+        CreateMap<AgendamentoTarefasDTO, AgendamentoTarefas>();
+        CreateMap<AgendamentoTarefas, AgendamentoTarefasDTO>();
+
     }
 }

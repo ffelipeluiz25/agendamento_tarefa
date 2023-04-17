@@ -1,5 +1,4 @@
 ﻿using GestaoTarefas.Data.DTOs;
-using GestaoTarefas.Enumeradores;
 using GestaoTarefas.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
@@ -14,6 +13,21 @@ public class TarefaController : ControllerBase
     public TarefaController(IAgendamentoTarefaService agendamentoTarefaService)
     {
         _agendamentoTarefaService = agendamentoTarefaService;
+    }
+
+    [HttpGet()]
+    [Consumes(MediaTypeNames.Application.Json)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [SwaggerResponse(StatusCodes.Status200OK, "Recuperar tarefas", typeof(ResultDTO<List<AgendamentoTarefasDTO>>))]
+    [SwaggerResponse(StatusCodes.Status400BadRequest, Type = typeof(ResultDTO<List<AgendamentoTarefasDTO>>))]
+    public async Task<IActionResult> RecuperarTodos()
+    {
+        var result = await _agendamentoTarefaService.RecuperarTodas();
+        if (!result.Success)
+            return BadRequest(result);
+
+        return Ok(result);
     }
 
     [HttpGet("status")]
@@ -54,7 +68,7 @@ public class TarefaController : ControllerBase
     {
         var result = await _agendamentoTarefaService.Agendamento(agendamento);
         if (!result.Success)
-            return BadRequest(result);
+            return Conflict();
         return Ok(result);
     }
 
@@ -64,7 +78,7 @@ public class TarefaController : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [SwaggerResponse(StatusCodes.Status200OK, "Atualizar status", typeof(ResultDTO<bool>))]
     [SwaggerResponse(StatusCodes.Status400BadRequest, Type = typeof(ResultDTO<bool>))]
-    public async Task<IActionResult> AtualizarStatus(AtualizaStatusDTO atualizaStatus)
+    public async Task<IActionResult> AtualizarStatus([FromBody]AtualizaStatusDTO atualizaStatus)
     {
         var result = await _agendamentoTarefaService.AtualizarStatus(atualizaStatus);
         if (!result.Success)

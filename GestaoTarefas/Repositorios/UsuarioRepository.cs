@@ -21,8 +21,11 @@ public class UsuarioRepository : IUsuarioRepository
         using (var scope = _services.CreateScope())
         {
             var _context = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
-            var usuario = _mapper.Map<Usuarios>(usuarioDto);
+            var usuarioValid = await _context.Usuario.FirstOrDefaultAsync(usuario => usuario.Nome.Equals(usuarioDto.Nome) && usuario.Sobrenome.Equals(usuarioDto.Sobrenome));
+            if (usuarioValid != null)
+                return Utils.RetornoMensagem<bool>.RetornoMensagemErro("Usuario ja cadastrado!");
 
+            var usuario = _mapper.Map<Usuarios>(usuarioDto);
             usuario.DataCriacao = DateTime.Now;
             _context.Usuario.Add(usuario);
             await _context.SaveChangesAsync();
