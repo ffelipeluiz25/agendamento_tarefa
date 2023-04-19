@@ -68,7 +68,7 @@ public class TarefaController : ControllerBase
     {
         var result = await _agendamentoTarefaService.Agendamento(agendamento);
         if (!result.Success)
-            return Conflict();
+            return Ok(result);
         return Ok(result);
     }
 

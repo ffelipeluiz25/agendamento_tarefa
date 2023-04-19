@@ -52,10 +52,17 @@ public class ArquivoTarefaController : ControllerBase
         byte[] file = new byte[] { };
         foreach (string strFile in Directory.GetFiles(folder))
         {
-            fileName = strFile.Replace(folder + "\\", "");
-            using (var stream = System.IO.File.OpenRead(strFile))
+            try
             {
-                file = ConverteStreamToByteArray(stream);
+                fileName = strFile.Replace(folder + "\\", "");
+                using (var stream = System.IO.File.OpenRead(strFile))
+                {
+                    file = ConverteStreamToByteArray(stream);
+                }
+            }
+            catch (Exception ex)
+            {
+
             }
         }
 
